@@ -75,7 +75,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (url.pathname === '/panel/login' && req.method === 'POST') {
       const { password = '' } = JSON.parse((await readBody(req)) || '{}')
-      if (!safeEq(sign(password), sign(WEB_PASSWORD))) return json(res, 401, { error: 'Mot de passe incorrect' })
+      if (!safeEq(sign(String(password).trim()), sign(WEB_PASSWORD))) return json(res, 401, { error: 'Mot de passe incorrect' })
       return json(res, 200, { ok: true }, {
         'Set-Cookie': `panel=${token()}; HttpOnly; SameSite=Strict; Path=/; Max-Age=86400`,
       })
